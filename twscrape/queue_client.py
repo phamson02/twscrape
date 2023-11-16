@@ -161,7 +161,7 @@ class QueueClient:
         if msg.startswith("(131) Dependency: Internal error."):
             raise DependencyError(msg)
 
-        if msg.startswith("(code 200): Dependency: Unspecified"):
+        if msg.startswith("Dependency: Unspecified"):
             raise DependencyError(msg)
 
         # possible banned by old api flow
@@ -200,7 +200,7 @@ class QueueClient:
                 # already handled
                 continue
             except DependencyError:
-                logger.error(f"Dependency error, returnning: {url}")
+                logger.error(f"Dependency error, returning: {url}")
                 return
             except (httpx.ReadTimeout, httpx.ProxyError):
                 # http transport failed, just retry
