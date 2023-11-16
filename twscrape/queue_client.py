@@ -161,6 +161,9 @@ class QueueClient:
         if msg.startswith("(131) Dependency: Internal error."):
             raise DependencyError(msg)
 
+        if msg.startswith("(code 200): Dependency: Unspecified"):
+            raise DependencyError(msg)
+
         # possible banned by old api flow
         if rep.status_code in (401, 403):
             await self._close_ctx(utc.ts() + 60 * 60 * 12)  # lock for 12 hours
