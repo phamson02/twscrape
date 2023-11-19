@@ -53,7 +53,7 @@ async def main(args):
     api = API(pool, debug=args.debug)
 
     if args.command == "accounts":
-        print_table(await pool.accounts_info())
+        print_table(await pool.accounts_info(args.show_all))
         return
 
     if args.command == "stats":
@@ -155,8 +155,14 @@ def run():
         return p
 
     subparsers.add_parser("version", help="Show version")
-    subparsers.add_parser("accounts", help="List all accounts")
+    # subparsers.add_parser("accounts", help="List all accounts")
     subparsers.add_parser("stats", help="Get current usage stats")
+
+    show_accounts = subparsers.add_parser("accounts", help="List all accounts")
+    # Options to include accounts name
+    show_accounts.add_argument(
+        "--show-all", "-sa", action="store_true", help="Show all accounts", default=False
+    )
 
     add_accounts = subparsers.add_parser("add_accounts", help="Add accounts")
     add_accounts.add_argument("file_path", help="File with accounts")

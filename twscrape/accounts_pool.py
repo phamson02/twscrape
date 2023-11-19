@@ -316,7 +316,7 @@ class AccountsPool:
         rs = await fetchone(self._db_file, qs)
         return dict(rs) if rs else {}
 
-    async def accounts_info(self):
+    async def accounts_info(self, show_all: bool = False):
         accounts = await self.get_all()
 
         items: list[AccountInfo] = []
@@ -340,4 +340,9 @@ class AccountsPool:
         )
         items = sorted(items, key=lambda x: x["active"], reverse=True)
         # items = sorted(items, key=lambda x: x["total_req"], reverse=True)
+
+        if not show_all:
+            # Hide username
+            items = [dict(x, username="*" * len(x["username"])) for x in items]
+
         return items
